@@ -1,24 +1,14 @@
 <template>
-  <div class="m-8">
-    <h1 class="text-2xl text-red-500 font-bold">UTable-Filtering page</h1>
-    <!-- dropdown -->
-    <!-- When All Status is selected → remove the filter (undefined). -->
-    <USelectMenu :model-value="table?.tableApi?.getColumn('status')?.getFilterValue() as string ?? 'All Status'"
-      :items="dropOptions"
-      @update:model-value="(val) => table?.tableApi?.getColumn('status')?.setFilterValue(val === 'All Status' ? undefined : val)"
-      class="m-5 w-1/7 cursor-pointer" />
-    <!-- table -->
-    <UTable ref="table" v-model:column-filters="columnFilters" :data="data" :columns="columns" class="m-5 mt-25" />
+  <div class="flex flex-col flex-1 w-full">
+    <div class="flex px-4 py-3.5 border-b border-accented">
+      <UInput v-model="globalFilter" class="max-w-sm" placeholder="Filter..." />
+    </div>
+
+    <UTable ref="table" v-model:global-filter="globalFilter" :data="data" :columns="columns" />
   </div>
 </template>
 <script lang="ts" setup>
-
-// Select 
-
-const dropOptions = ['All Status', 'paid', 'failed', 'refunded']
-
-
-// Table
+const globalFilter = ref('')
 import { h, resolveComponent } from 'vue'
 import type { TableColumn } from '@nuxt/ui'
 
@@ -69,7 +59,6 @@ const data = ref<Payment[]>([
     amount: 639
   }
 ])
-
 const columns: TableColumn<Payment>[] = [
   {
     accessorKey: 'id',
@@ -126,9 +115,5 @@ const columns: TableColumn<Payment>[] = [
     }
   }
 ]
-
-
-// for filtering logic
-const table = useTemplateRef('table')
-const columnFilters = ref([])
 </script>
+<style></style>
